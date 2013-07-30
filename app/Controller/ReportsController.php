@@ -81,8 +81,36 @@ class ReportsController extends AppController {
 			}
 		}
 	}
-	public function extratificadoMensal($value='')
+	public function extratificadoMensal($mesInicial='', $mesFinal='')
 	{
+		@Controller::loadModel('Expenses'); 
+		$expenses=null;
+		 if($mesInicial=="x" || $mesFinal=="x"){
+		 	$this->set("valor", "");
+		 }
+		 else
+		{
+				$expenses = $this->Expenses->query("select MONTHNAME(e.date) mes,
+sum(e.ammount) total
+from expenses e
+WHERE
+MONTH(e.date)>=1
+AND
+MONTH(e.date)<=12
+group by MONTH(e.date)");
+			if($expenses==null){
+				$this->set("valor", "0");
+			}
+			else
+			{
+				 echo "<pre>";
+				print_r($expenses);
+				echo "</pre>";
+				//$this->set("valor", $expenses[0][0]["total"]);
+				//$this->set("conta", $expenses[0]["acct"]["name"]);
+
+			}
+		}
 			
 	}
 
